@@ -1,0 +1,17 @@
+############
+# Unity3D .gitignore file.
+#	 Store this file at the root of your local repository.
+
+.DS_Store
+Library
+Library/*.asset
+Library/*.db
+Library/AssetServerCacheV3
+Temp
+*.csproj
+*.pidb
+*.sln
+build
+/*.sublime-workspace
+/*.sublime-project
+ninjajam.userprefs
