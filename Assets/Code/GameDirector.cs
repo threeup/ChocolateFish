@@ -9,6 +9,7 @@ public class GameDirector : MonoBehaviour
 	public GameObject prototypes;
 	public static GameDirector Instance;
 	public int score = 0;
+	public int maxScore = 10; 
 
 	public GUIText debugScore;
 
@@ -45,6 +46,18 @@ public class GameDirector : MonoBehaviour
 	public void Score(int val)
 	{
 		score += val;
-		debugScore.text = score.ToString();
+		if (score >= maxScore)
+		{
+			maxScore *= 2;
+		}
+		if (debugScore.gameObject.activeSelf)
+		{
+			debugScore.text = score.ToString();
+		}
+	}
+
+	public float ScorePercentage()
+	{
+		return (float)score / (float)maxScore;
 	}
 }
