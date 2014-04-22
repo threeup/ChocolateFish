@@ -61,7 +61,7 @@ public class SpriteSequencer : MonoBehaviour
 
 	public void StartAnim(SequenceType stype)
 	{
-		this.gameObject.transform.localPosition = new Vector3(framePosition.x, framePosition.y, 0f);
+		this.gameObject.transform.localPosition = new Vector3(framePosition.x, framePosition.y, this.gameObject.transform.localPosition.z);
 		if (currentSequence == null || currentSequence.sequenceType != stype)
 		{
 			SpriteSequence nextSequence = System.Array.Find(sequences, x => x.sequenceType == stype);

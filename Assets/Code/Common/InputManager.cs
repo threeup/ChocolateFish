@@ -91,17 +91,13 @@ public class InputManager : MonoBehaviour
 			Touch touch = Input.GetTouch(i);
 			if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
 			{
-				Vector2 midpoint = new Vector2(Screen.width*0.5f, Screen.height*0.1f);
+				Vector2 midpoint = new Vector2(Screen.width*0.5f, Screen.height*0.15f);
 				Vector2 diff = touch.position - midpoint;
-				diff /= 30f;
-				if (Mathf.Abs(diff.x) < 0.25f)
-				{
-					diff.x = 0f;
-				}
-				if (Mathf.Abs(diff.y) < 0.25f)
-				{
-					diff.y = 0f;
-				}
+				diff.x = diff.x/Screen.width;
+				diff.y = diff.y/Screen.height;
+				diff.x *= (Mathf.Abs(diff.x) < 0.1f) ? 0f : 4f;
+				diff.y *= (Mathf.Abs(diff.y) < 0.05f) ? 0f : 5f;
+				
 				debugInputText.text = diff.x +" , "+diff.y;
 				HandleAxis(Mathf.Clamp(diff.x, -1f, 1f), Mathf.Clamp(diff.y, -1f, 1f));
 			}

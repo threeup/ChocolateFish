@@ -62,7 +62,7 @@ public class HookBody : TauBody
 		bool oobMINX = (thisPos.x-(imageSize.x/2) < GameVars.WATER_BOUND.xMin);
 
 		bool oobMAXY = (thisPos.y+(imageSize.y/2) < GameVars.WATER_BOUND.yMin);
-		bool oobMINY = (thisPos.y-(imageSize.y/2) > GameVars.WATER_BOUND.yMax);
+		bool oobMINY = (thisPos.y-(imageSize.y/2) > 0);
 		if (oobMAXX || oobMINX || oobMAXY || oobMINY)
 		{
 			Vector2 dir = new Vector2(thisPos.x, thisPos.y) - GameVars.WATER_BOUND.center;
