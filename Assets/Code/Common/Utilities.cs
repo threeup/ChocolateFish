@@ -12,6 +12,7 @@ public class Utilities
 	static public int HOOKLAYER = LayerMask.NameToLayer("Hook");
 	static public int FISHLAYER = LayerMask.NameToLayer("Fish");
 	static public int MANLAYER = LayerMask.NameToLayer("Man");
+	static public int DEBRISLAYER = LayerMask.NameToLayer("Debris");
 
 	static public void Noop()
 	{

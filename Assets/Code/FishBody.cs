@@ -161,7 +161,20 @@ public class FishBody : TauBody
 		}
 
 		fishOwner.brainEntity.BrainUpdate(deltaTime);
-		fishOwner.brainEntity.React(this);
+		bool didChange = fishOwner.brainEntity.ControlBody(this);
+
+		if (didChange)
+		{
+			if (IsForceEnabled(ForceType.ENGINE))
+			{
+				sequencer.SwitchToAnim(SequenceType.MOVE);
+			}
+			else
+			{
+				sequencer.isLooping = false;
+			}
+				 //: SequenceType.IDLE);
+		}
 
 		//Utilities.DrawForce(this);
 	}

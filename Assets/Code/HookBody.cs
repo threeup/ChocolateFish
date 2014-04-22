@@ -82,11 +82,16 @@ public class HookBody : TauBody
 	{
 		TauCollider otherColl = otherObj.GetComponent<TauCollider>();
 		FishBody otherFishBody = otherColl.body as FishBody;
-		if (otherFishBody != null)
+		if (otherFishBody != null && otherObj.layer == Utilities.FISHLAYER)
 		{
 			Vector3 diffPos = otherFishBody.gameObject.transform.position - go.transform.position;
 			diffPos.z = 0;
 			AttachToSelf(otherFishBody, diffPos);
+			return;
+		}
+		if (otherFishBody != null && otherObj.layer == Utilities.DEBRISLAYER)
+		{
+			PurgeContents(BodyState.MOVING);
 			return;
 		}
 

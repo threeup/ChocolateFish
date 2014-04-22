@@ -31,7 +31,7 @@ public class BrainEntity : MonoBehaviour
 		}
 	}
 
-	public void React(FishBody body)
+	public bool ControlBody(FishBody body)
 	{
 		Vector3 moveToward = thinker.GetMoveToward();		
 		//Vector3 lookToward = thinker.GetLookToward();
@@ -42,14 +42,16 @@ public class BrainEntity : MonoBehaviour
 
 		body.SetForceDir(ForceType.ENGINE, body.pushDir);
 		body.SetForce(ForceType.ENGINE, body.pushForce);
-			
+		
+		bool didChange = false;
 		if (body.thisSpeed > body.pushMax)
 		{
-			body.SetForceEnabled(ForceType.ENGINE, false);
+			didChange = body.SetForceEnabled(ForceType.ENGINE, false);
 		}
-		if (body.thisSpeed < body.pushMin)
+		else if (body.thisSpeed < body.pushMin)
 		{
-			body.SetForceEnabled(ForceType.ENGINE, true);
+			didChange = body.SetForceEnabled(ForceType.ENGINE, true);
 		}
+		return didChange;
 	}
 }

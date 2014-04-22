@@ -27,6 +27,7 @@ public class TauBody : MonoBehaviour
 	public TauPawn owner;
 	public Rigidbody tauRigidbody;
 	public TauCollider tauCollider;
+	public SpriteSequencer sequencer;
 	public BodyMachine machine = null;
 	public bool isSetup = false;
 
@@ -217,9 +218,14 @@ public class TauBody : MonoBehaviour
 		forces[(int)ftype].fDir = dir;
 	}
 
-	public void SetForceEnabled(ForceType ftype, bool ena)
+	public bool SetForceEnabled(ForceType ftype, bool ena)
 	{
+		if (forces[(int)ftype].enabled == ena)
+		{
+			return false;
+		}
 		forces[(int)ftype].enabled = ena;	
+		return true;
 	}
 
 	public bool IsForceEnabled(ForceType ftype)

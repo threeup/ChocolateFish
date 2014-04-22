@@ -10,6 +10,7 @@ public class GameDirector : MonoBehaviour
 	public static GameDirector Instance;
 	public int score = 0;
 
+	public GUIText debugScore;
 
 
 	public void Awake()
@@ -44,5 +45,6 @@ public class GameDirector : MonoBehaviour
 	public void Score(int val)
 	{
 		score += val;
+		debugScore.text = score.ToString();
 	}
 }
