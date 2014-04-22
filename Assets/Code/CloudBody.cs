@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Text;
 
 
-public class FishBody : TauBody
+public class CloudBody : TauBody
 {
-	public FishPawn fishOwner;
+	public CloudPawn cloudOwner;
 
 	public float configSpeedMin = 1.0f;
 	public float configSpeedMax = 3.0f;
@@ -15,9 +15,6 @@ public class FishBody : TauBody
 	public float pushMax;
 	public float pushForce;
 	public Vector2 pushDir;
-
-	float hookImmuneTime;
-
 	
 	public Quaternion baseRot;
 	
@@ -29,7 +26,7 @@ public class FishBody : TauBody
 		base.StartSetup();
 		//HandleAxis = HookHandleInput;
 		//HandleCollide = FishCollide;
-		MotorUpdate = FishNothing;
+		MotorUpdate = CloudNothing;
 		PhysicsUpdate = SimplePhysicsUpdate;
 
 		float fishSpeed = Random.Range(configSpeedMin,configSpeedMax); 
@@ -58,8 +55,6 @@ public class FishBody : TauBody
 		machine.AddEnterListener((int)BodyState.ENTERING, OnEntering);
 		machine.AddEnterListener((int)BodyState.MOVING, OnMoving);
 		
-		machine.AddEnterListener((int)BodyState.ATTACHED, OnAttach);
-		machine.AddExitListener((int)BodyState.ATTACHED, OnAttachExit);
 		machine.AddEnterListener((int)BodyState.BACKGROUND, OnBackground);
 	}
 
@@ -69,9 +64,9 @@ public class FishBody : TauBody
 		bool oobMAXX = (thisPos.x+(imageSize.x/2) > GameVars.WATER_BOUND.xMax);
 		bool oobMINX = (thisPos.x-(imageSize.x/2) < GameVars.WATER_BOUND.xMin);
 
-		bool oobMAXY = (thisPos.y+(imageSize.y/2) < GameVars.WATER_BOUND.yMin);
-		bool oobMINY = (thisPos.y-(imageSize.y/2) > GameVars.WATER_BOUND.yMax);
-		bool isOOB = oobMAXX || oobMINX || oobMAXY || oobMINY;
+		//bool oobMAXY = (thisPos.y+(imageSize.y/2) < GameVars.WATER_BOUND.yMin);
+		//bool oobMINY = (thisPos.y-(imageSize.y/2) > GameVars.WATER_BOUND.yMax);
+		bool isOOB = oobMAXX || oobMINX;// || oobMAXY || oobMINY;
 		if (machine.IsState(BodyState.ENTERING))
 		{
 			if (!isOOB)
@@ -96,15 +91,13 @@ public class FishBody : TauBody
 	public void OnEntering(object obj)
 	{
 		tauCollider.collider.enabled = false;
-		hookImmuneTime = 999;
-		MotorUpdate = FishMotorUpdate;
+		MotorUpdate = CloudMotorUpdate;
 	}
 
 	public void OnMoving(object obj)
 	{
 		tauCollider.collider.enabled = true;
-		hookImmuneTime = GameVars.HOOKIMMUNE;
-		MotorUpdate = FishMotorUpdate;
+		MotorUpdate = CloudMotorUpdate;
 	}
 
 	public void OnWaiting(object obj)
@@ -117,43 +110,23 @@ public class FishBody : TauBody
 		thisPos = Vector2.zero;
 		Stop();
 		tauCollider.collider.enabled = false;
-		MotorUpdate = FishNothing;
-		fishOwner.ReturnToSpawner();
+		MotorUpdate = CloudNothing;
+		cloudOwner.ReturnToSpawner();
 		
 	}
 
-	public void OnAttach(object obj)
-	{
-		Stop();
-		SetForceEnabled(ForceType.ENGINE, false);
-		tauCollider.collider.enabled = false;
-		MotorUpdate = FishAttachedMotor;
-	}
-
-	public void OnAttachExit(object obj)
-	{
-		
-	}
-
-	public void FishNothing(float deltaTime)
+	public void CloudNothing(float deltaTime)
 	{
 
 	}
 
-	public void FishAttachedMotor(float deltaTime)
-	{
-
-	}
 
 	public void UpdateTimers(float deltaTime)
 	{
-		if (hookImmuneTime > 0f)
-		{
-			hookImmuneTime -= deltaTime;
-		}
+		
 	}
 
-	public void FishMotorUpdate(float deltaTime)
+	public void CloudMotorUpdate(float deltaTime)
 	{
 		CheckOOB();
 		UpdateTimers(deltaTime);
@@ -163,7 +136,7 @@ public class FishBody : TauBody
 		}
 
 		owner.brainEntity.BrainUpdate(deltaTime);
-		bool didChange = owner.brainEntity.ControlFishBody(this);
+		bool didChange = owner.brainEntity.ControlCloudBody(this);
 
 		if (didChange)
 		{
@@ -184,6 +157,6 @@ public class FishBody : TauBody
 
 	public override bool CanAttach()
 	{
-		return hookImmuneTime < 0.01f;
+		return false;
 	}
 }

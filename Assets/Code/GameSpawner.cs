@@ -10,7 +10,14 @@ public class GameSpawner : MonoBehaviour
 
 	public Vector3 forward;
 	private Vector3 objectScale;
-	public Vector3 spawnerScale;
+	private Vector3 spawnerScale;
+
+	public bool isLeftToRight = true;
+	public bool isUnderwater = true;
+	public float spawnerMinY = 0.0f;
+	public float spawnerMaxY = 1.0f;
+	public float spawnRateMin = 2f;
+	public float spawnRateMax = 6f;
 
 
 	private float timer = 0f;
@@ -18,7 +25,12 @@ public class GameSpawner : MonoBehaviour
 	public void Awake()
 	{
 		objectQueue = new Queue();
+		spawnerScale.x = isLeftToRight ? -1f : 1f;
+		spawnerScale.y = 1f;
+		spawnerScale.z = 1f;
+		Reposition();
 		
+
 		FillPool(10);
 	}
 
@@ -53,7 +65,7 @@ public class GameSpawner : MonoBehaviour
 		{
 			Spawn();
 			Reposition();
-			timer = UnityEngine.Random.Range(2f,6f);
+			timer = UnityEngine.Random.Range(spawnRateMin,spawnRateMax);
 		}
 	}
 
@@ -68,20 +80,25 @@ public class GameSpawner : MonoBehaviour
 		obj.transform.position = this.transform.position;
 		obj.transform.eulerAngles = forward;
 		obj.transform.localScale = Vector3.Scale(objectScale, spawnerScale);
-		FishPawn pawn = obj.GetComponent<FishPawn>();
+		TauPawn pawn = obj.GetComponent<TauPawn>();
 		if (pawn != null)
 		{
-			pawn.fishBody.Setup();
+			pawn.body.Setup();
 			pawn.Setup();
-			pawn.fishBody.machine.SetState(BodyState.WAITING);
-			pawn.fishBody.machine.SetState(BodyState.READY);
+			pawn.body.machine.SetState(BodyState.WAITING);
+			pawn.body.machine.SetState(BodyState.READY);
 		}
 	}
 
 	private void Reposition()
 	{
 		Vector3 pos = this.transform.position;
-		pos.y = UnityEngine.Random.Range(GameVars.FISH_SPAWN.yMin,GameVars.FISH_SPAWN.yMax);
+		pos.x = isLeftToRight ? GameVars.FISH_SPAWN.x : -GameVars.FISH_SPAWN.x;
+		float min = isUnderwater ? GameVars.FISH_SPAWN.yMin : 0;
+		float max = isUnderwater ? GameVars.FISH_SPAWN.yMax : 7;
+		pos.y = UnityEngine.Random.Range(
+					Mathf.Lerp(min, max, spawnerMinY),
+					Mathf.Lerp(min, max, spawnerMaxY));
 		this.transform.position = pos;
 
 	}

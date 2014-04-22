@@ -93,8 +93,17 @@ public class InputManager : MonoBehaviour
 			{
 				Vector2 midpoint = new Vector2(Screen.width*0.5f, Screen.height*0.1f);
 				Vector2 diff = touch.position - midpoint;
+				diff /= 30f;
+				if (Mathf.Abs(diff.x) < 0.25f)
+				{
+					diff.x = 0f;
+				}
+				if (Mathf.Abs(diff.y) < 0.25f)
+				{
+					diff.y = 0f;
+				}
 				debugInputText.text = diff.x +" , "+diff.y;
-				HandleAxis(Mathf.Clamp(diff.x/30f, -1f, 1f), Mathf.Clamp(diff.y/30f, -1f, 1f));
+				HandleAxis(Mathf.Clamp(diff.x, -1f, 1f), Mathf.Clamp(diff.y, -1f, 1f));
 			}
 			 ++i;
 		}
